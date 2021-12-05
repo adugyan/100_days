@@ -1,99 +1,90 @@
-def main():
-    powered_on: bool = True
-    water, milk, coffee, money = set_resources(300, 200, 100, 0)
-    while powered_on:
-        user_input = input("What would you like? (espresso/latte/cappuccino): ").lower()
-        if user_input == 'report':
-            print(f"""
-            Water: {water}ml
-            Milk: {milk}ml
-            Coffee: {coffee}g
-            Money: ${money}
-            """)
-            main()
-        elif user_input == 'off':
-            powered_on = False
-        elif user_input == 'latte':
-            new_w, new_milk, new_c, new_m = create_latte(water, milk, coffee, money)
-            water, milk, coffee, money = set_resources(new_w, new_milk, new_c, new_m)
+MENU = {
+    "espresso": {
+        "ingredients": {
+            "water": 50,
+            "coffee": 18,
+        },
+        "cost": 1.5,
+    },
+    "latte": {
+        "ingredients": {
+            "water": 200,
+            "milk": 150,
+            "coffee": 24,
+        },
+        "cost": 2.5,
+    },
+    "cappuccino": {
+        "ingredients": {
+            "water": 250,
+            "milk": 100,
+            "coffee": 24,
+        },
+        "cost": 3.0,
+    }
+}
+
+profit = 0
+resources = {
+    "water": 300,
+    "milk": 200,
+    "coffee": 100,
+}
 
 
-def set_resources(new_w, new_milk, new_c, new_m) -> (int, int, int, float):
-    """
-    Will return the amount of resources left for Water, Milk, Coffee, and Money.
-    :return:
-    """
-    water: int = new_w
-    milk: int = new_m
-    coffee: int = new_c
-    money: float = new_m
-    return water, milk, coffee, money
+def is_resource_sufficient(order_ingredients):
+    """Returns True when order can be made, False if ingredients are insufficient."""
+    for item in order_ingredients:
+        if order_ingredients[item] > resources[item]:
+            print(f"​Sorry there is not enough {item}.")
+            return False
+    return True
 
 
-def get_resources() -> (int, int, int, float):
-    water, milk, coffee, money = set_resources()
-    return water, milk, coffee, money
+def process_coins():
+    """Returns the total calculated from coins inserted."""
+    print("Please insert coins.")
+    total = int(input("how many quarters?: ")) * 0.25
+    total += int(input("how many dimes?: ")) * 0.1
+    total += int(input("how many nickles?: ")) * 0.05
+    total += int(input("how many pennies?: ")) * 0.01
+    return total
 
 
-def receive_coins() -> (float, float):
-    total_quarters: float = 0
-    total_dimes: float = 0
-    total_nickels: float = 0
-    total_pennies: float = 0
-
-    print("Please insert coins")
-    total_quarters = float(input("How many quarters?: "))
-    total_dimes = float(input("How many dimes?: "))
-    total_nickels = float(input("How many nickels?: "))
-    total_pennies = float(input("How many pennies?: "))
-
-    return total_quarters, total_dimes, total_nickels, total_pennies
-
-
-def calculate_cash() -> float:
-    """
-    This function will take the coins given in receive_coins and return the total amount the user has
-    put into the machine
-    :return:
-    """
-    quarters: float = 0.25
-    dimes: float = 0.10
-    nickels: float = 0.05
-    pennies: float = 0.01
-    money_put_in: float
-    quarters_received, dimes_received, nickels_received, pennies_received = receive_coins()
-
-    quarters = quarters_received * quarters
-    dimes = dimes_received * dimes
-    nickels = nickels_received * nickels
-    pennies = pennies_received * pennies
-
-    money_put_in = quarters + dimes + nickels + pennies
-    return money_put_in
-
-
-def create_latte(water, milk, coffee, money):
-    """
-    Ensures that the user has entered enough money to buy the latte. Ensures there are enough resources. If there are
-    complete the transaction and return how many resources are still left.
-    :return:
-    """
-    print("That'll be $2.50 ")
-    cash_amount = calculate_cash()
-
-    if water >= 200 and milk >= 150 and coffee >= 24:
-        water = water - 200
-        milk = milk - 150
-        coffee = coffee - 24
+def is_transaction_successful(money_received, drink_cost):
+    """Return True when the payment is accepted, or False if money is insufficient."""
+    if money_received >= drink_cost:
+        change = round(money_received - drink_cost, 2)
+        print(f"Here is ${change} in change.")
+        global profit
+        profit += drink_cost
+        return True
     else:
-        print("Sorry. There are insufficient ingredients to complete your request.")
+        print("Sorry that's not enough money. Money refunded.")
+        return False
 
-    if cash_amount >= 2.50:
-        money = money + 2.50
-        print("Here is your latte ☕. Enjoy!")
-        change = cash_amount - 2.50
-        print(f"Here's your change: {change}")
 
-    return water, milk, coffee, money
+def make_coffee(drink_name, order_ingredients):
+    """Deduct the required ingredients from the resources."""
+    for item in order_ingredients:
+        resources[item] -= order_ingredients[item]
+    print(f"Here is your {drink_name} ☕️. Enjoy!")
 
-main()
+
+is_on = True
+
+while is_on:
+    choice = input("​What would you like? (espresso/latte/cappuccino): ")
+    if choice == "off":
+        is_on = False
+    elif choice == "report":
+        print(f"Water: {resources['water']}ml")
+        print(f"Milk: {resources['milk']}ml")
+        print(f"Coffee: {resources['coffee']}g")
+        print(f"Money: ${profit}")
+    else:
+        drink = MENU[choice]
+        if is_resource_sufficient(drink["ingredients"]):
+            payment = process_coins()
+            if is_transaction_successful(payment, drink["cost"]):
+                make_coffee(choice, drink["ingredients"])
