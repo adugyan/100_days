@@ -1,3 +1,5 @@
+from typing import List, Dict
+
 MENU = {
     "espresso": {
         "ingredients": {
@@ -24,15 +26,15 @@ MENU = {
     }
 }
 
-profit = 0
-resources = {
+profit: int = 0
+resources: Dict[str, int] = {
     "water": 300,
     "milk": 200,
     "coffee": 100,
 }
 
 
-def is_resource_sufficient(order_ingredients):
+def is_resource_sufficient(order_ingredients) -> bool:
     """Returns True when order can be made, False if ingredients are insufficient."""
     for item in order_ingredients:
         if order_ingredients[item] > resources[item]:
@@ -51,7 +53,7 @@ def process_coins():
     return total
 
 
-def is_transaction_successful(money_received, drink_cost):
+def is_transaction_successful(money_received, drink_cost) -> bool:
     """Return True when the payment is accepted, or False if money is insufficient."""
     if money_received >= drink_cost:
         change = round(money_received - drink_cost, 2)
@@ -73,6 +75,10 @@ def make_coffee(drink_name, order_ingredients):
 
 is_on = True
 
+"""
+The choice we take as input can be passed as an index value into another variable.
+We can then go down levels by using variable[<key>] to access nested dictionary values
+"""
 while is_on:
     choice = input("​What would you like? (espresso/latte/cappuccino): ")
     if choice == "off":
