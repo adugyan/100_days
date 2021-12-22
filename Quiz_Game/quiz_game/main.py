@@ -4,6 +4,7 @@ from question_model import Question
 from typing import List
 from quiz_brain import QuizBrain
 
+
 question_bank: List[question_model.Question] = []
 
 for data in question_data:
