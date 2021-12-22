@@ -22,3 +22,4 @@ for pokemon in range(len(pokemon_list)):
 
 pokedex.align = 'l'
 print(pokedex)
+print(pokemon_list[0]['name'])
