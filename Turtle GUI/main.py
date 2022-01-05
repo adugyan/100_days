@@ -2,7 +2,6 @@ import turtle
 from turtle import Turtle, Screen
 from random import choice, randint
 
-
 """
 There can be a menu for the shapes. Dictionary with each shape having a number of sides key.
 User choices will be appended into a list
@@ -17,7 +16,7 @@ timmy.speed('fastest')
 
 
 def draw_shapes(num_sides):
-    angle = 360/num_sides
+    angle = 360 / num_sides
     for _ in range(num_sides):
         timmy.forward(100)
         timmy.right(angle)
@@ -48,15 +47,23 @@ def random_color():
 
 def triangle_decagon():
     for _ in range(3, 11):
-        random_colors = random_color()
-        timmy.color(random_colors)
+        timmy.color(random_color())
         draw_shapes(_)
 
 
-for _ in range(200):
-    random_colors = random_color()
-    timmy.color(random_colors)
-    random_walk()
+def full_walk():
+    for _ in range(200):
+        timmy.color(random_color())
+        random_walk()
 
+
+def draw_spirograph():
+    for _ in range(50):
+        timmy.color(random_color())
+        timmy.circle(100)
+        current_heading = timmy.heading()
+        timmy.setheading(current_heading + 10)
+
+draw_spirograph()
 screen = Screen()
 screen.exitonclick()
