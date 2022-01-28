@@ -8,8 +8,8 @@ from quiz_brain import QuizBrain
 question_bank: List[question_model.Question] = []
 
 for data in question_data:
-    question = data['text']
-    answer = data['answer']
+    question = data['question']
+    answer = data['correct_answer']
     question_bank.append(Question(question, answer))
 
 game_set = QuizBrain(question_bank)
