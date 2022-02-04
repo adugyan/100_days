@@ -7,16 +7,22 @@ class ScoreBoard(Turtle):
         self.color('white')
         self.p1_score = 0
         self.p2_score = 0
-        self.create_p1_scoreboard()
-        self.create_p2_scoreboard()
+        self.penup()
         self.hideturtle()
+        self.update_scoreboard()
 
-    def create_p1_scoreboard(self):
-        self.penup()
-        self.goto(-100, 270)
-        self.write(f"{self.p1_score}", align="center", font=("Courier", 20, "normal"))
+    def update_scoreboard(self):
+        self.clear()
+        self.goto(-100, 200)
+        self.write(f"{self.p1_score}", align="center", font=("Courier", 70, "normal"))
+        self.goto(100, 200)
+        self.write(f"{self.p2_score}", align="center", font=("Courier", 70, "normal"))
 
-    def create_p2_scoreboard(self):
-        self.penup()
-        self.goto(100, 270)
-        self.write(f"{self.p2_score}", align="center", font=("Courier", 20, "normal"))
+    def p1_point(self):
+        self.p1_score += 1
+        self.update_scoreboard()
+
+    def p2_point(self):
+        self.p2_score += 1
+        self.update_scoreboard()
+
