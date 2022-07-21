@@ -1,2 +1,2 @@
 # 100_days
-Collection of various programs
+Collection of various python programs
