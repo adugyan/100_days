@@ -1,12 +1,16 @@
 import requests
 
-response = requests.get(url="http://api.open-notify.org/iss-now.json", verify=False)
-response.raise_for_status()
+def getCapitalCity(country):
+    parameters: dict = {
+        'name': country
+    }
+    response = requests.get(url='https://jsonmock.hackerrank.com/api/countries', params=parameters)
+    response.raise_for_status()  # checks for error codes
 
-data = response.json()
-print(data)
+    data = response.json()
+    country_data = data['data']
+    print(data)
 
-longitude = data['iss_position']['longitude']
-latitude = data['iss_position']['latitude']
+cap_city = getCapitalCity('Afghanistan')
 
-iss_position: tuple = (longitude, latitude)
+print(cap_city)
