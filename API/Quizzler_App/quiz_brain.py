@@ -22,11 +22,14 @@ class QuizBrain:
 
     def check_answer(self, user_answer):
         correct_answer = self.current_question.answer
+        is_right = False
         if user_answer.lower() == correct_answer.lower():
             self.score += 1
             print("You got it right!")
+            is_right = True
         else:
             print("That's wrong.")
 
         print(f"Your current score is: {self.score}/{self.question_number}")
         print("\n")
+        return is_right
