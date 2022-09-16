@@ -43,7 +43,7 @@ if will_rain:
     proxy_client = TwilioHttpClient()
     proxy_client.session.proxies = {'https': os.environ['https_proxy']}
 
-    client = Client(account_sid, auth_token, http_client=proxy_client)
+    client = Client(account_sid, AUTH_TOKEN, http_client=proxy_client)
     message = client.messages \
         .create(
         body="It's going to rain today. Remember to bring an umbrella ☔",
