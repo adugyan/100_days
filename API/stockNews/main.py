@@ -3,6 +3,7 @@ import os
 from twilio.rest import Client
 from twilio.http.http_client import TwilioHttpClient
 
+#TODO Add a better news API. This one is shite
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla"
 account_sid = 'ACb5236e0d8592647779059ccc50e61ef7'
@@ -29,13 +30,14 @@ news_params = {
 
 ## STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
-"""stock_response = requests.get(url=STOCK_ENDPOINT, params=stock_params)
+stock_response = requests.get(url=STOCK_ENDPOINT, params=stock_params)
 stock_response.raise_for_status()
 
 stock_data = stock_response.json()['Time Series (Daily)']
-stock_list = [value for (key, value) in stock_data.items()]"""
-yesterday_closing_price = 60 #float(stock_list[0]['4. close'])
-ereyesterday_closing = 20 #float(stock_list[1]['4. close'])
+stock_list = [value for (key, value) in stock_data.items()]
+
+yesterday_closing_price = float(stock_list[0]['4. close'])
+ereyesterday_closing = float(stock_list[1]['4. close'])
 percentage_decrease = (((yesterday_closing_price / ereyesterday_closing) / yesterday_closing_price) * 100)
 percentage_increase = (((ereyesterday_closing / yesterday_closing_price) / yesterday_closing_price) * 100)
 
@@ -44,6 +46,7 @@ percentage_increase = (((ereyesterday_closing / yesterday_closing_price) / yeste
 
 news_response = requests.get(url=NEWS_ENDPOINT, params=news_params)
 news_response.raise_for_status()
+formatted_article = None
 
 news_data = news_response.json()['articles']
 if percentage_decrease >= 5:
@@ -58,7 +61,7 @@ if percentage_increase >= 5:
         stock_change = f"{STOCK}: 🔺{percentage_increase}%"
         title = f"{news_data[index]['title']}:"
         description = f"{news_data[index]['description']} \n"
-        formatted_article = f"{stock_change} \n{title} \n{description}"
+        formatted_art = f"{stock_change} \n{title} \n{description}"
 
 
 proxy_client = TwilioHttpClient()
